@@ -28,7 +28,7 @@ class EVT:
         upper = threshold + dx*size
         for l in range(1, int(len(Z)/4)+1):  
             d = []
-            for x in np.linspace(threshold, upper,dx):
+            for x in np.arange(threshold, upper,dx):
                 F = F_l(Z, x, l)
                 xi = np.log(2)**-1*np.log((Z[l-1] - Z[2*l-1])/(Z[2*l-1] - Z[4*l-1]))
                 sigma = (Z[2*l-1] - Z[4*l-1])*xi/(2**xi - 1)
