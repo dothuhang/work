@@ -38,7 +38,7 @@ X = np.random.randn(10000)
 model = v.Normal(X)
 
 print(model.VaR())
-print(v.ES())
+print(model.ES())
 ```
 
 #### _Kernel Density_
