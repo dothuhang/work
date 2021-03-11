@@ -1,13 +1,8 @@
 # RiskManagement package
 
 ## Summary
-This package provides useful modules for calculating Value-at-Risk (VaR) and Expected Shortfall (ES). The package includes 4 modules: 
-- HistoricalQuantile
-- Normal
-- KernelDensity
-- ExtremeValue.
 
-## News
+- version 0.0.1: module ValueAtRisk
 
 ## Methodology
 #### _Historical Quantile_
@@ -17,17 +12,15 @@ The method is straightforward: VaR is taken as the value at <img src="https://re
 
 ###### Usage
 ```py
-from RiskManagement import HistoricalQuantile as hq
 import numpy as np
+from RiskManagement import ValueAtRisk as v
 
-x = np.array([1,2,3,4,5,6,7,8,9,10,11,12])
-print(hq.VaR(x, alpha=.99))
-print(hq.ES(x, alpha=.99))
-```
-Expected result:
-```
->>>11.89
->>>12.0
+X = np.random.randn(10000)
+
+model = v.HistoricalQuantile(X)
+
+print(model.VaR())
+print(model.ES())
 ```
 #### _Normal Distribution_
 
@@ -37,17 +30,15 @@ The method relies on a specific assumption that the log-return distribution <img
 <img src="https://render.githubusercontent.com/render/math?math=ES_\alpha = \mu + \dfrac{\sigma}{1 - \alpha} \dfrac{1}{\sqrt{2\pi}} exp\Big(-\big(\mathcal{N}^{-1}(\alpha)\big)^2/2\Big)">
 
 ```py
-from RiskManagement import Normal as n
 import numpy as np
+from RiskManagement import ValueAtRisk as v
 
-x = np.array([1,2,3,4,5,6,7,8,9,10,11,12])
-print(n.VaR(x, alpha=.99))
-print(n.ES(x, alpha=.99))
-```
-Expected Result
-```
->>>14.530675063160272
->>>15.70045949109648
+X = np.random.randn(10000)
+
+model = v.Normal(X)
+
+print(model.VaR())
+print(v.ES())
 ```
 
 #### _Kernel Density_
@@ -58,17 +49,15 @@ The estimated density is smoothed by an arbitrary parameter (bandwidth) <img src
 
 Having the kernel, VaR and ES is calculated by discretising the density estimate.
 ```py
-from RiskManagement import KernelDensity as kd
 import numpy as np
+from RiskManagement import ValueAtRisk as v
 
-x = np.array([1,2,3,4,5,6,7,8,9,10,11,12])
-print(kd.VaR(x, alpha=.99, bandwidth=.001, dx=.05))
-print(kd.ES(x, alpha=.99, bandwidth=.001, dx=.05))
-```
-Expected Result
-```
->>>11.000000000000009
->>>1828.4854518398995
+X = np.random.randn(10000)
+
+model = v.KernelDensity(X)
+model.fit()
+print(model.VaR())
+print(model.ES())
 ```
 
 #### _Extreme Value Theory_
@@ -95,16 +84,13 @@ Once the parameters are derived, VaR can be calculated directly using the follow
 > McNeil, A.J., Extreme Value Theory for Risk Managers (1999)
 
 ```py
-from RiskManagement import ExtremeValue as ev
 import numpy as np
+from RiskManagement import ValueAtRisk as v
 
-x = [1,2,3,4,5,6,7,8,9,10,11,12]
-evt = ev.EVT(np.array(x))
-print(evt.VaR(alpha=.99, threshold=2.0))
-print(evt.ES(alpha=.99, threshold=2.0))
-```
-Expected Result: 3 Pickand estimators and VaR (or ES)
-```
-([-1.0, 12.0, 1], 12.879999999999999)
-([-1.0, 12.0, 1], 12.94)
+X = np.random.randn(10000)
+
+model = v.EVT(X)
+model.fit()
+print(model.VaR())
+print(model.ES())
 ```
