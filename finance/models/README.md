@@ -27,7 +27,7 @@ plt.plot(np.linspace(0,T,steps), np.transpose(bt))
 
 #### _class Vasicek_
 
-###### _function simulate(r0, theta, alpha, sigma, T=1, steps=100, paths=1)
+###### _function simulate(r0, theta, alpha, sigma, T=1, steps=100, paths=1)_
 
 ```py
 from models import InterestRate as ir
@@ -43,7 +43,7 @@ rt = rate.simulate(r0, theta, alpha, sigma, T, steps, paths)
 plt.plot(np.linspace(0,T,steps), np.transpose(rt))
 ```
 
-###### _function calibrate()
+###### _function calibrate()_
 
 ```py
 rate.calibrate(rt[0], T/steps)
@@ -54,7 +54,7 @@ print(rate.parameters)
 
 #### _class CIR_
 
-###### _function simulate(self, r0, theta, alpha, sigma, T=1, steps=100, paths=1)
+###### _function simulate(self, r0, theta, alpha, sigma, T=1, steps=100, paths=1)_
 
 ```py
 from models import InterestRate as ir
@@ -72,7 +72,7 @@ plt.plot(np.linspace(0,T,steps), np.transpose(rt))
 
 #### _class NelsonSiegel_
 
-###### _function calibrate(t, rt, error=10**-6)
+###### _function calibrate(t, rt, error=10**-6)_
 ```py
 from models import InterestRate as ir
 import numpy as np
@@ -85,7 +85,7 @@ ns = ir.NelsonSiegel()
 beta = ns.calibrate(t[1:], r[1:], 10**-6)
 
 ```
-###### _function calculate(t, beta)
+###### _function calculate(t, beta)_
 
 ```py
 plt.plot(x, ns.calculate(x, beta))
