@@ -2,7 +2,7 @@ import numpy as np
 import numpy.random as rd
 from sklearn.linear_model import LinearRegression as linreg
 
-class _Vasicek:
+class Vasicek:
     '''
     Attributes
     ---------------------------
@@ -73,7 +73,7 @@ class _Vasicek:
             rt[:, i] = rt[:, i-1]*(1 - alpha*dt) + alpha*theta*dt + z[:, i]        
         return rt
 
-class _CIR:
+class CIR:
     '''
     Attributes
     ---------------------------
@@ -119,7 +119,7 @@ class _CIR:
                 rt[:, i] = abs(rt[:, i-1]*(1 - alpha*dt) + alpha*theta*dt + z[:, i]*(rt[:, i-1]**.5))
             return rt
 
-class _NelsonSiegel:
+class NelsonSiegel:
     '''
     class NelsonSiegel represent Nelson Siegel Svensson model for interest rate
     
@@ -213,136 +213,3 @@ class _NelsonSiegel:
 
             print('Total number of iteration: ', iteration)
             return beta
-                 
-def InterestRate():
-    '''
-    Parameter
-    ---------------------------
-    model: str
-        specify model for interest rate object
-    
-    Returns
-    --------------------------- 
-    an object of either Vasicek, CIR or NelsonSiegel class
-    '''
-    if model=='Vasicek':
-        return _Vasicek()
-    elif model=='CIR':
-        return _CIR()
-    elif model=='NelsonSiegel':
-        return _NelsonSiegel()
-
-def BrownianMotion(T=1, steps=10, paths=1):
-    '''
-    Parameters:
-    ------------------
-    T: float, optional (default=1)
-        end point of Brownian motion
-    
-    steps: int, optional (default=10)
-        number of steps to discretize
-        
-    paths: int, optional (default=1)
-        number of paths to simulate
-        
-    Returns
-    ------------------
-    2-D array
-    '''
-    if (paths < 1) or (isinstance(paths, int) == False):
-        print("Input Error! Number of paths must be positive and of type int.")
-    else:
-        z = (T/steps)**.5*rd.randn(paths, steps)
-        return np.array([np.cumsum(z[i,:]) for i in range(paths)])
-        
-class _BlackScholes:
-    '''
-    Attributes
-    ------------------
-    model: str
-        'Black-Scholes'
-    '''
-    def __init__(self):
-        self.model = 'Black-Scholes'
-        
-      
-    def simulate(self,S0, mu, sigma, T=1, steps=1, paths=1):
-        '''
-        Parameters
-        ------------------
-        S0: float
-            current value of stock price
-            
-        mu: float
-            drift (for P-measure) or risk-free rate (for risk-neutral measure)
-
-        sigma: float
-            volatility of stock
-
-        T: float, optional (default=1)
-            time span of simulation period
-
-        steps: int, optional (default=1)
-            number of steps to discretize
-
-        paths: int, optional (default=1)
-            number of paths to simulate
-
-        Returns
-        ------------------
-        2-D array
-            (paths x steps) matrice represent stock price S[i,j] at time t[j] of path i-th
-        ''' 
-        if (paths < 1) or (isinstance(paths, int) == False) or (isinstance(steps, int) == False):
-            print("Input Error! Number of steps and paths must be positive and of type int.")
-        else:
-            t = np.linspace(0,T,steps+1)
-            Bt = BrownianMotion(T, steps, paths)
-            St = S0*np.array([np.exp((mu-.5*sigma**2)*t[i] + sigma*Bt[:, i]) for i in range(steps)])
-            return np.transpose(St)
-        
-        
-class _LocalVolatility:
-    def __init__(self):
-        self.model = 'LocalVolatility'
-        
-    def mu(self,t, s):
-        pass
-    
-    def sigma(self, t, s):
-        pass
-    
-    def simulate(self, S0, T=1, steps=1, paths=1):
-        '''
-        Parameters
-        ------------------
-        S0: float
-            current value of stock price
-            
-        T: float, optional (default=1)
-            time span of simulation period
-
-        steps: int, optional (default=1)
-            number of steps to discretize
-
-        paths: int, optional (default=1)
-            number of paths to simulate
-
-        Returns
-        ------------------
-        2-D array
-            (paths x steps) matrice represent stock price S[i,j] at time t[j] of path i-th
-        ''' 
-        if (paths < 1) or (isinstance(paths, int) == False) or (isinstance(steps, int) == False):
-            print("Input Error! Number of steps and paths must be positive and of type int.")
-        else:
-            t = np.linspace(0,T,steps+1)
-            dt = T/steps
-            z = (T/steps)**.5*rd.randn(paths, steps)
-            St = np.zeros((paths, steps))
-            St[:,0] = S0
-            
-            for i in range(paths):
-                for j in range(1, steps):
-                    St[i,j] = St[i,j-1] * (1 + self.mu(t[j-1], St[i,j-1])*dt + self.sigma(t[j-1], St[i,j-1])*z[i,j-1])
-            return St       
