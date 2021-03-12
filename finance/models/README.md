@@ -96,8 +96,21 @@ plt.plot(t, r)
 
 #### _class BlackScholes_
 
+###### _function simulate(S0, mu, sigma, T=1, steps=100, paths=1)
+```py
+import numpy as np
+from models import Stock
+    
+st = Stock.BlackScholes()
+x = st.simulate(S0=10, mu=.01, sigma=.2, T=1, steps=100, paths=1)
+plt.plot(np.transpose(x))
+```
+
 #### _class LocalVolatility_
 
+Create a child class to explicitly specify formulae for mu(t, s) and sigma(t, s)
+
+###### _function simulate(S0, T=1, steps=1, paths=1)
 ```py
 import numpy as np
 import numpy.random as rd
@@ -115,6 +128,6 @@ class LV(Stock.LocalVolatility):
     
     
 st = LV()
-x = st.simulate(10, 1, 100, 1)
+x = st.simulate(S0=10, T=1, steps=100, paths=1)
 plt.plot(np.transpose(x))
 ```
