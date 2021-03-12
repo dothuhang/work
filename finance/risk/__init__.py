@@ -1,1 +1,1 @@
-from RiskManagement import ValueAtRisk
+from risk import ValueAtRisk
