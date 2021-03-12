@@ -11,7 +11,7 @@ The method is straightforward: VaR is taken as the value at <img src="https://re
 ###### Usage
 ```py
 import numpy as np
-from RiskManagement import ValueAtRisk as v
+from risk import ValueAtRisk as v
 
 X = np.random.randn(10000)
 
@@ -29,7 +29,7 @@ The method relies on a specific assumption that the log-return distribution <img
 
 ```py
 import numpy as np
-from RiskManagement import ValueAtRisk as v
+from risk import ValueAtRisk as v
 
 X = np.random.randn(10000)
 
@@ -48,7 +48,7 @@ The estimated density is smoothed by an arbitrary parameter (bandwidth) <img src
 Having the kernel, VaR and ES is calculated by discretising the density estimate.
 ```py
 import numpy as np
-from RiskManagement import ValueAtRisk as v
+from risk import ValueAtRisk as v
 import matplotlib.pyplot as plt
 
 X = np.random.randn(10000)
@@ -86,13 +86,13 @@ Once the parameters are derived, VaR can be calculated directly using the follow
 
 ```py
 import numpy as np
-from RiskManagement import ValueAtRisk as v
+from risk import ValueAtRisk as v
 import matplotlib.pyplot as plt
 
 X = np.random.randn(10000)
 
 model = v.EVT(X)
-evt.fit(threshold=0, dx=.01)
+model.fit(threshold=0, dx=.01)
 print(model .parameters)
 print(model .VaR())
 print(model .ES())
