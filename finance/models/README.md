@@ -97,3 +97,24 @@ plt.plot(t, r)
 #### _class BlackScholes_
 
 #### _class LocalVolatility_
+
+```py
+import numpy as np
+import numpy.random as rd
+from models import Stock
+
+class LV(Stock.LocalVolatility):
+    def __init__(self):
+        super().__init__()
+            
+    def mu(self, t, s):
+        return .1
+    
+    def sigma(self, t, s):
+        return 1.7/(s**.8)
+    
+    
+st = LV()
+x = st.simulate(10, 1, 100, 1)
+plt.plot(np.transpose(x))
+```
