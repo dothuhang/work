@@ -1,6 +1,6 @@
 import numpy as np
 import numpy.random as rd
-import BrownianMotion
+from models import BrownianMotion
         
 class BlackScholes:
     '''

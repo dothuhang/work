@@ -70,7 +70,7 @@ class Vasicek:
         rt = np.zeros(shape = (paths, steps))
         rt[:,0] = r0
         for i in range(1,steps):
-            rt[:, i] = rt[:, i-1]*(1 - alpha*dt) + alpha*theta*dt + z[:, i]        
+            rt[:, i] = rt[:, i-1]*(1 - alpha*dt) + alpha*theta*dt + z[:, i-1]        
         return rt
 
 class CIR:
@@ -142,7 +142,7 @@ class NelsonSiegel:
     calculate(self, t, beta)
         return 1-D array of interest rate by NSS model using given parameters
         
-    calibrate(self, t, rt, error=10**-4)
+    calibrate(self, t, rt, error=10**-6)
         return 1-D array of model parameters
     '''
     def __init__(self):
