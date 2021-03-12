@@ -1,14 +1,9 @@
 import numpy as np
 from scipy.special import erfinv
 
-def __author__():
-    return "Thu-Hang DO"
-    
-def __version__():
-    return "0.0.1"
-
-def __name__():
-    return "ValueAtRisk"
+__author__ = "Thu-Hang DO"
+__version__ = "0.0.1"
+__name__"ValueAtRisk"
     
 class HistoricalQuantile:
     '''
