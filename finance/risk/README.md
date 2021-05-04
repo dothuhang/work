@@ -38,12 +38,16 @@ print(model.ES())
 #### _class Normal(loss)_
 ##### Attribute
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 ###### _data: 1-D array_
 
 =======
 ###### _data: 1-D array
 >>>>>>> b65024114af92fc37ee38c936b6cb5ad484fc16d
+=======
+###### _data: 1-D array_
+>>>>>>> 9d767ab8d0f0468f4c868e6a03945a430bfe6f27
 The method relies on a specific assumption that the log-return distribution <img src="https://render.githubusercontent.com/render/math?math=r_t"> follows Gaussian distribution. The mean <img src="https://render.githubusercontent.com/render/math?math=\mu"> and standard deviation <img src="https://render.githubusercontent.com/render/math?math=\sigma"> is estimated from historical data
 <img src="https://render.githubusercontent.com/render/math?math=VaR_\alpha = \mu + \sigma\mathcal{N}^{-1}(\alpha)">
 
@@ -81,9 +85,14 @@ print(v.ES())
 =======
 #### _Kernel Density_
 ##### Attributes
+<<<<<<< HEAD
 ###### _data: 1-D array
 ###### _kernel: 2-D array (x, f(x))
 >>>>>>> b65024114af92fc37ee38c936b6cb5ad484fc16d
+=======
+###### _data: 1-D array_
+###### _kernel: 2-D array (x, f(x))_
+>>>>>>> 9d767ab8d0f0468f4c868e6a03945a430bfe6f27
 This method is nonparametrical, the distribution is infered from historical data using kernel method, which utilises Gaussian kernel in this case. 
 <img src="https://render.githubusercontent.com/render/math?math=\hat{f}(x) = \frac{1}{nh}\sum\limits_{i=1}^n\mathcal{K}\big(\frac{x-x_i}{h}\big)">
 
@@ -127,10 +136,16 @@ print(model.ES())
 
 =======
 ##### Attributes
+<<<<<<< HEAD
 ###### _data: 1-D array
 ###### _threshold: float
 ###### _parameters: 1-D array (shape, scale, location) parameters
 >>>>>>> b65024114af92fc37ee38c936b6cb5ad484fc16d
+=======
+###### _data: 1-D array_
+###### _threshold: float_
+###### _parameters: 1-D array (shape, scale, location) parameters_
+>>>>>>> 9d767ab8d0f0468f4c868e6a03945a430bfe6f27
 Extreme Value Theory is preferred to estimate VaR and ES at extremes (<img src="https://render.githubusercontent.com/render/math?math=\alpha"> >> 99%)
 The following section introduces a widely accepted method to estimate the parameters in GEV method which was introduced by Pickands (1975). In short, they are given by:
 
