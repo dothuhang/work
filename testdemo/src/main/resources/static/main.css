@@ -1,0 +1,11 @@
+html {
+    font-size: 14px;
+}
+
+.modal:nth-of-type(odd) {
+    z-index: 1052 !important;
+}
+
+.modal-backdrop.show:nth-of-type(odd) {
+    z-index: 1051 !important;
+}

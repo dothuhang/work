@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Project | Tasks </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/main.css">
+
+</head>
+<body>
+
+
+<div class="wrapper">
+
+    <nav class="navbar navbar-expand bg-dark navbar-dark">
+        <!-- Brand -->
+        <a class="navbar-brand" href="#">Logo</a>
+
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="home.html" th:href="@{/home}">Home</a>
+            </li>
+            <!-- Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Menu
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="projects.html" th:href="@{/home/projects}">View Projects</a>
+                    <a class="dropdown-item" href="uploadCsv.html" th:href="@{/home/upload}">Upload Files</a>
+                </div>
+            </li>
+            <!-- Dropdown User -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="userdrop" data-toggle="dropdown">
+                    [[${#request.userPrincipal.principal.username}]]
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="hello.html" th:href="@{/logout}">Logout</a>
+                </div>
+            </li>
+        </ul>
+
+    </nav>
+
+    <div class="container-fluid pt-3">
+         <br>
+        <h5>Sub-Task List</h5>
+        <br>
+        <div>
+            <a class="btn btn-primary" id="plusBtn" data-toggle="modal" href="#addModal"><i class="fas fa-plus"></i></a>
+            <a class="btn btn-success" id="planBtn">Plan <i class="fas fa-angle-right"></i></a>
+        </div>
+        <div class="container-fluid pt-3">
+            <table class="table"  id="planTbl">
+                <thead class="thead-light">
+                    <th>Id</th>
+                    <th>Description</th>
+                    <th>Nb Heures</th>
+                    <th>Zone</th>
+                    <th>Parent Id</th>
+                    <th>Predecessors</th>
+                    <th>Time lag</th>
+                    <th></th>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+
+<!--    Add Sub-task Modal popup -->
+    <input type="hidden" name="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" id="csrf">
+    <div class="modal" id="addModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Sub-task</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+<!--                    <form id="form" onsubmit="return false">-->
+                    <form id="form">
+                        <input type="hidden" id="idToEdit"/>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" class="form-control"></textarea>
+<!--                            <input type="text" class="form-control" id="description">-->
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Nb Heures</label>
+                            <input type="number" value="0" step="any" class="form-control" id="quantity">
+                            <span id="avai_nb_hrs"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="zone">Zone</label>
+                            <input type="number" value="1" step="1" class="form-control" id="zone">
+                        </div>
+                        <div class="form-group">
+                            <label for="parent">Parent</label>
+                            <select class="form-control" id="parent">
+
+                            </select>
+                        </div>
+                        <div class="select">
+                            <label for="predecessors">Predecessors</label>
+                            <input class="form-control" type="text" readonly id="predecessors" name="predecessors"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="time_lag">Time lag</label>
+                            <input class="form-control" type="text" readonly id="time_lag"/>
+                        </div>
+                        <a class="btn btn-primary" id="addPredBtn" data-toggle="modal" href="#addPredModal">Add</a>
+                        <a class="btn btn-danger" id="resetPredBtn">Reset</a>
+
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="okBtn" type="submit" form="form">Save</button>
+                    <a class="btn btn-secondary" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" id="addPredModal" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Predecessors</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="pre">Predecessors</label>
+                            <select class="form-control" id="pre">
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="timeLag">Time lag</label>
+                            <input class="form-control" min="0" step="1" type="number" id="timeLag"/>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <a class="btn btn-primary" id="okPreBtn" data-dismiss="modal">OK</a>
+                    <a class="btn btn-secondary" data-dismiss="modal">Cancel</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" id="delModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title" style="color: red">Warning</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Are you sure you want to delete this sub-task?
+                    <input hidden id="idToDel"/>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <a class="btn btn-primary" id="okDelBtn" data-dismiss="modal">OK</a>
+                    <a class="btn btn-secondary" data-dismiss="modal">Cancel</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script src="/scripts/editTask.js"></script>
+
+
+<script>
+
+    var taskData = [
+        {'id': 1, 'description': 'Task 1', 'quantity': 100},
+        {'id': 2, 'description': 'Task 2', 'quantity': 200},
+        {'id': 3, 'description': 'Task 3', 'quantity': 300},
+        {'id': 4, 'description': 'Task 4', 'quantity': 500},
+        {'id': 5, 'description': 'Task 5', 'quantity': 700}
+    ];
+    var planData = [
+        {'id': 1, 'description': 'Task 1', 'quantity': 100},
+        {'id': 2, 'description': 'Task 2', 'quantity': 200},
+        {'id': 3, 'description': 'Task 3', 'quantity': 300},
+        {'id': 4, 'description': 'Task 4', 'quantity': 500},
+        {'id': 5, 'description': 'Task 5', 'quantity': 700}
+    ];
+
+    $(document).ready(function () {
+
+        var path = window.location.pathname;
+        console.log(path);
+        console.log($("meta[name='ctx']").attr("content"));
+        var ecomid = path.split("/")[3];
+
+
+        requestAllTasks(ecomid);
+        requestAllPlans(ecomid);
+        /*
+            console.log(taskData);
+            console.log(planData);*/
+
+        $("#parent").on("change", function () {
+            $("#description").text($(this).text());
+        })
+
+        $("#quantity").on("keyup", function () {
+            $("#quantity").attr("max", taskData[$("#parent").val()].quantity);
+            $("#avai_nb_hrs").text("Available nb. hours: " + parseFloat(taskData[$("#parent").val()].quantity).toFixed(2));
+        })
+
+        $("#okPreBtn").on("click", function () {
+            if ($("#predecessors").val() == "") {
+                $("#predecessors:text").val($("#pre").val());
+                $("#time_lag:text").val($("#timeLag").val());
+            } else {
+                $("#predecessors:text").val($("#predecessors").val() +"," + $("#pre").val());
+                $("#time_lag:text").val($("#time_lag").val() +"," + $("#timeLag").val());
+            }
+
+        });
+
+        $("#resetPredBtn").on("click", function () {
+            $("#predecessors:text").val("");
+            $("#time_lag:text").val("");
+        })
+
+        $("#form").submit(function() {
+
+            let plan = {
+                'ecomid': ecomid,
+                'code_lvl_1': taskData[$("#parent").val()].code_lvl_1,
+                'code_lvl_2': taskData[$("#parent").val()].code_lvl_2,
+                'description': $("#description").val(),
+                'quantity': $("#quantity").val(),
+                'ht': $("#quantity").val() / taskData[$("#parent").val()].quantity * taskData[$("#parent").val()].ht,
+                'ds': $("#quantity").val() / taskData[$("#parent").val()].quantity * taskData[$("#parent").val()].ds,
+                'zone': $("#zone").val(),
+                'parent': taskData[$("#parent").val()].id,
+                'predecessors': $("#predecessors").val(),
+                'time_lag': $("#time_lag").val()
+            };
+
+            if (!$("#idToEdit").val()) {
+                plan.id = $("#idToEdit").val();
+            }
+
+            taskData[$("#parent").val()].quantity = taskData[$("#parent").val()].quantity - parseFloat($("#quantity").val());
+            requestAllPlans(ecomid);
+            $("#idToEdit").val(null);
+            $("#addModal").modal('toggle');
+
+        });
+
+        $("#planBtn").attr('href', '/home/projects/' + ecomid + '/plan');
+
+        $("#okDelBtn").on("click", function () {
+            requestDeletePlan($("#idToDel").val(), $("#csrf").val());
+            requestAllTasks(ecomid);
+            $("#idToDel").val(null);
+        });
+
+
+    });
+
+    function requestAllTasks(id) {
+        populateParentSelection(taskData);
+    }
+
+    function requestSavePlan(plan, token) {
+        planData.push(plan, '0');
+        populatePlanTbl(planData);
+    }
+
+    function requestAllPlans(id) {
+
+        populatePlanTbl(planData);
+        $("#pre").find('option').remove().end();
+        for (var i in planData) {
+            $("#pre").append("<option value='" + planData[i].id + "'>" + planData[i].description + "</option>");
+        }
+
+    }
+
+    function requestDeletePlan(id, token) {
+        populatePlanTbl(planData);
+    }
+
+    function populateParentSelection(data) {
+        $("#parent").find('option').remove().end();
+        for (var i in data) {
+            $("#parent").append("<option value='" + i +"'>" + data[i].description + "</option>");
+        }
+        $("#parent").selectedIndex = 1;
+    }
+
+    function populatePlanTbl(data) {
+
+
+        for (var i in planData) {
+            $("#planTbl").append("<tr>")
+                .append("<td>" + planData[i].id + "</td>")
+                .append("<td>" + planData[i].description + "</td>")
+                .append("<td>" + planData[i].quantity + "</td>")
+                .append("<td>" + planData[i].zone + "</td>")
+                .append("<td>" + planData[i].predecessors + "</td>")
+                .append("<td>" + planData[i].time_lag + "</td>")
+                .append("<td><div class='btn-group'>" +
+                    "<a class='btn btn-primary' onclick='setEditId(" + planData[i].id + ", " + i + ")' data-toggle='modal' href='#addModal'><i class='fas fa-edit'></i></a>"+
+                    "<a class='btn btn-danger' onclick='setDelId(" + planData[i].id + ", " + i + ")' data-toggle='modal' href='#delModal'><i class='fas fa-minus'></i></a>"+
+                    "</div></td>")
+                .append("</tr>");
+        }
+
+
+    }
+
+    function setEditId(id, idx) {
+        $("#idToEdit").val(id);
+        $("#description").val(planData[idx].description);
+        $("#zone").val(planData[idx].zone);
+        $("#parent").val(planData[idx].parent);
+        $("#quantity").val(planData[idx].quantity);
+        $("#quantity").attr("max", taskData[planData[idx]].quantity);
+        $("#predecessors").val(planData[idx].predecessors);
+        $("#time_lag").val(planData[idx].time_lag);
+        $("#addModal").show();
+    }
+
+    function setDelId(id, idx) {
+        $("#idToDel").val(id);
+    }
+
+
+
+</script>
+
+
+
+</body>
+
+</html>

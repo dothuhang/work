@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home | Projects</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/main.css">
+</head>
+<body>
+
+
+<div class="wrapper">
+
+    <nav class="navbar navbar-expand bg-dark navbar-dark">
+        <!-- Brand -->
+        <a class="navbar-brand" href="#">Logo</a>
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/home}">Home</a>
+            </li>
+            <!-- Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Menu
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="@{/home/projects}">View Projects</a>
+                    <a class="dropdown-item" th:href="@{/home/upload}">Upload Files</a>
+                </div>
+            </li>
+            <!-- Dropdown User -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="userdrop" data-toggle="dropdown">
+                    [[${#request.userPrincipal.principal.username}]]
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="@{/login}">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+
+    <div class="container-fluid pt-3">
+
+        <table class="table table-hover"  id="myTable">
+            <thead class="thead-light">
+                <th data-field="id">Id</th>
+                <th data-field="description">Description</th>
+                <th data-field="client">Client</th>
+            </thead>
+        </table>
+
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script src="/scripts/projects.js"></script>
+
+
+</body>
+</html>

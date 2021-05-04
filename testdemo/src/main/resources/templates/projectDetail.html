@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Project Detail</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/main.css">
+
+</head>
+<body>
+
+
+<div class="wrapper">
+
+    <nav class="navbar navbar-expand bg-dark navbar-dark">
+        <!-- Brand -->
+        <a class="navbar-brand" href="#">Logo</a>
+
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/home}">Home</a>
+            </li>
+            <!-- Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Menu
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="@{/home/projects}">View Projects</a>
+                    <a class="dropdown-item" th:href="@{/home/upload}">Upload Files</a>
+                </div>
+            </li>
+            <!-- Dropdown User -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="userdrop" data-toggle="dropdown">
+                    [[${#request.userPrincipal.principal.username}]]
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="@{/login}">Logout</a>
+                </div>
+            </li>
+
+        </ul>
+
+    </nav>
+
+    <div class="container-fluid pt-3">
+
+        <div class="container pt-3">
+            <div style="font-size: 20px">
+                <a class="btn" id="editBtn"><i class="fa fa-edit"></i></a>Summary
+            </div>
+        <form id="form">
+            <table class="table table-borderless" id="ecomSum">
+
+            </table>
+            <table class="table table-borderless">
+                <tr>
+                    <td>Start Date Chantier:</td>
+                    <td><input disabled type="date" class="form-control" id="start_date_chantier"/></td>
+                    <td>Finish Date Chantier:</td>
+                    <td><input disabled type="date" class="form-control" id="finish_date_chantier"/></td>
+                </tr>
+                <tr>
+                    <td>Date de versement acompte:</td>
+                    <td><input disabled type="date" class="form-control" id="acompte_date"/></td>
+                    <td>L'acompte de:</td>
+                    <td><input disabled type="number" class="form-control" min="0" max="100" id="acompte_pct"/></td>
+                </tr>
+                <tr>
+                    <td>Remboursement a partir de:</td>
+                    <td><input disabled type="number" class="form-control" min="0" max="100" id="rembourse_min"/></td>
+                    <td>à:</td>
+                    <td><input disabled type="number" class="form-control" min="0" max="100" id="rembourse_max"/></td>
+                </tr>
+                <tr>
+                    <td>Retenue de garantie:</td>
+                    <td colspan="3"><input disabled type="number" class="form-control" min="0" max="100" id="retenue"/></td>
+                </tr>
+                <tr>
+                    <td colspan="3">Penalités de retard (% du montant HT par jour):</td>
+                    <td><input disabled type="number" class="form-control" min="0" max="100" id="penalty"/></td>
+                </tr>
+            </table>
+            <button class="btn btn-primary" type="submit" id="okBtn">Save</button>
+
+        </form>
+        </div>
+        <br>
+
+        <div id="accordion" class="container pt-3">
+            <div class="card">
+                <div class="card-header" id="material">
+                    <h5 class="mb-0">
+                        <a class="btn" data-toggle="collapse" data-target="#materialBody"
+                                aria-expanded="true" aria-controls="materialBody"><h5>Materials</h5></a>
+<!--                        <a class="btn" id="editMaterialBtn"><i class="fas fa-edit"></i></a>-->
+                    </h5>
+                </div>
+                <div id="materialBody" class="collapse" aria-labelledby="material" data-parent="#accordion">
+                    <div class="card-body">
+                        <table id="materialList" class="table table-borderless">
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="task">
+                    <h5 class="mb-0">
+
+                        <a class="btn" id="editTaskBtn"><i class="fa fa-edit"></i></a>
+                        <a class="btn" data-toggle="collapse" data-target="#taskBody"
+                           aria-expanded="true" aria-controls="taskBody"><h5>Tasks</h5></a>
+                    </h5>
+                </div>
+                <div id="taskBody" class="collapse" aria-labelledby="task" data-parent="#accordion">
+                    <div class="card-body">
+                        <table id="taskList" class="table table-borderless">
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <br>
+    </div>
+
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script src="/scripts/projectDetail.js"></script>
+
+<!--
+<script>
+
+    var materials = [
+        {'description': 'MATIERE PREMIERE - METALLERIE'},
+        {'description': 'MATIERE PREMIERE - BOIS LAMELLE COLLE CLT'},
+        {'description': 'QUINCALLERIE'}
+    ];
+
+    $(document).ready(function () {
+
+        populateMaterialList(materials);
+        populateTaskList(materials);
+
+        $("#editBtn").on("click", function () {
+            $("#form input").attr('disabled', false);
+        });
+
+
+    });
+
+    function populateMaterialList(data) {
+        for (var i in data) {
+            $("#materialList").append("<tr>")
+                .append("<td>" + data[i].description + "</td>")
+        };
+
+        $("#materialList").append("</tr>");
+    }
+
+    function populateTaskList(data) {
+        for (var i in data) {
+            $("#taskList").append("<tr>")
+                .append("<td>" + data[i].description + "</td>")
+        };
+
+        $("#taskList").append("</tr>");
+    }
+
+</script>
+
+-->
+
+</body>
+</html>

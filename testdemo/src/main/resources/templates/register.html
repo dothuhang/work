@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+
+</head>
+<body>
+<div class="container">
+    Welcome!
+</div>
+<form th:action="@{/process_register}" method="post"
+      style="max-width: 600px; margin: 0 auto;"
+        th:object="${users}">
+    <div>
+        <div>
+            <label>Username</label>
+            <div><input type="text" th:field="*{username}" required/></div>
+        </div>
+        <div>
+            <label>Email</label>
+            <div><input type="email" th:field="*{email}" required/></div>
+        </div>
+        <div>
+            <label>Password</label>
+            <div><input type="password"  th:field="*{password}" required maxlength="10" minlength="6"/></div>
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Sign up</button>
+    </div>
+</form>
+</body>
+</html>

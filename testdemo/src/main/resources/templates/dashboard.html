@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+
+<div class="wrapper">
+
+    <nav class="navbar navbar-expand bg-dark navbar-dark">
+        <!-- Brand -->
+        <a class="navbar-brand" href="#">Logo</a>
+
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="home.html" th:href="@{/home}">Home</a>
+            </li>
+            <!-- Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Menu
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="projects.html" th:href="@{/home/projects}">View Projects</a>
+                    <a class="dropdown-item" href="uploadCsv.html" th:href="@{/home/upload}">Upload Files</a>
+                </div>
+            </li>
+            <!-- Dropdown User -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="userdrop" data-toggle="dropdown">
+                    [[${#request.userPrincipal.principal.username}]]
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="hello.html" th:href="@{/logout}">Logout</a>
+                </div>
+            </li>
+        </ul>
+
+    </nav>
+
+    <div class="container-fluid pt-3">
+        <div class="chartjs-render-monitor">
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var chartData = {
+        labels: ["S", "M", "T", "W", "T", "F", "S"],
+        datasets: [{
+            data: [589, 445, 483, 503, 689, 692, 634],
+        },
+            {
+                data: [639, 465, 493, 478, 589, 632, 674],
+            }]
+    };
+    var chLine = document.getElementById("myChart");
+    if (chLine) {
+        new Chart(chLine, {
+            type: 'line',
+            data: chartData,
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Project | Plan</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/main.css">
+</head>
+<body>
+
+
+<div class="wrapper">
+
+    <nav class="navbar navbar-expand bg-dark navbar-dark">
+        <!-- Brand -->
+        <a class="navbar-brand" href="#">Logo</a>
+
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/home}">Home</a>
+            </li>
+            <!-- Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    Menu
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="@{/home/projects}">View Projects</a>
+                    <a class="dropdown-item" th:href="@{/home/upload}">Upload Files</a>
+                </div>
+            </li>
+            <!-- Dropdown User -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="userdrop" data-toggle="dropdown">
+                    [[${#request.userPrincipal.principal.username}]]
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" th:href="@{/logout}">Logout</a>
+                </div>
+            </li>
+        </ul>
+
+    </nav>
+
+    <div class="container-fluid pt-3">
+
+        <div class="btn-group">
+            <button class="btn btn-primary" id="taskBtn">Tasks</button>
+            <button class="btn btn-primary" id="materialBtn">Materials</button>
+
+        </div>
+        <br>
+
+        <div class="row" style="padding-top: 50pt">
+            <div class="col-2">
+                <form id="form" onsubmit="return false">
+                    <div class="form-group">
+                        <select class="form-control" id="selectedPlan">
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="start_date">Start date</label>
+                        <input type="date" class="form-control" id="start_date"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="finish_date">Finish date</label>
+                        <input type="date" class="form-control" id="finish_date"/>
+                    </div>
+                    <label>Resources</label>
+                    <div id="resources" style="overflow-y: auto; height: 150px" data-type="task">
+
+                    </div>
+
+                </form>
+                <br>
+                <button class="btn btn-primary" form="form" type="submit" id="saveBtn">Save</button>
+            </div>
+
+            <div class="col-1"></div>
+
+            <div class="col-8" align="right">
+                <a><i class="fa fa-refresh"></i></a>
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js" integrity="sha512-VMsZqo0ar06BMtg0tPsdgRADvl0kDHpTbugCBBrL55KmucH6hP9zWdLIWY//OTfMnzz6xWQRxQqsUFefwHuHyg==" crossorigin="anonymous"></script>
+<script src="/scripts/plan.js"></script>
+<!--
+<script>
+
+    var resources = [
+        {'id': 1, 'description': 'Resource 1', 'skill': '99H1', 'limit_hours_per_week': 38},
+        {'id': 2, 'description': 'Resource 2', 'skill': '99H1', 'limit_hours_per_week': 38},
+        {'id': 3, 'description': 'Resource 3', 'skill': '99H2', 'limit_hours_per_week': 38},
+        {'id': 4, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 5, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 6, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 7, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 8, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 9, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 10, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 11, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 12, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 13, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 14, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 15, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 16, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 17, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+        {'id': 18, 'description': 'Resource 4', 'skill': '99H3', 'limit_hours_per_week': 38},
+
+    ];
+
+    var dataPlan = [
+        {
+            'id': 1, 'description': 'Sub-task 1', 'early_start': '2020-07-01', 'early_finish': '2020-10-01',
+            'late_start': '2020-07-01', 'late_finish': '2020-10-01', 'start_date': null, 'finish_date': null,
+            'code_lvl_2': '99H1'
+        },
+        {
+            'id': 2, 'description': 'Sub-task 2', 'early_start': '2020-08-01', 'early_finish': '2020-10-01',
+            'late_start': '2020-07-01', 'late_finish': '2020-10-01', 'start_date': null, 'finish_date': null,
+            'code_lvl_2': null
+        },
+        {
+            'id': 3, 'description': 'Sub-task 3', 'early_start': '2020-09-01', 'early_finish': '2020-10-01',
+            'late_start': '2020-07-01', 'late_finish': '2020-10-01', 'start_date': null, 'finish_date': null,
+            'code_lvl_2': '99H3'
+        },
+        {
+            'id': 4, 'description': 'Sub-task 4', 'early_start': '2020-10-01', 'early_finish': '2020-10-01',
+            'late_start': '2020-07-01', 'late_finish': '2020-10-01', 'start_date': null, 'finish_date': null,
+            'code_lvl_2': 'WMP'
+        },
+        {
+            'id': 5, 'description': 'Sub-task 5', 'early_start': '2020-04-01', 'early_finish': '2020-10-01',
+            'late_start': '2020-07-01', 'late_finish': '2020-10-01', 'start_date': null, 'finish_date': null,
+            'code_lvl_2': '99H2'
+        },
+    ];
+
+    var finance = [
+        {'date': '2020-01-01', 'cost': 20000},
+        {'date': '2020-02-01', 'cost': 10000},
+        {'date': '2020-03-01', 'cost': 30000},
+        {'date': '2020-04-01', 'cost': 70000},
+        {'date': '2020-05-01', 'cost': 80000}
+    ];
+
+    $("document").ready(function () {
+
+        $("#start_date").on("change", function () {
+            $("finish_date").attr("max", $(this).val());
+        });
+
+
+        $("#finish_date").on("change", function () {
+            $("start_date").attr("min", $(this).val());
+        });
+
+        plotChart(finance);
+        $("#taskBtn").on("click", function () {
+            $("#finish_date").prop('disabled', false);
+            $("#selectedPlan").find('option').remove().end();
+            for (var i in dataPlan) {
+                if (dataPlan[i].code_lvl_2 != null) {
+                    $("#selectedPlan").append("<option value='"+ i +"'>"+ dataPlan[i].description +"</option>");
+                }
+
+            }
+        });
+
+        $("#materialBtn").on("click", function () {
+            $("#finish_date").prop('disabled', true);
+            $("#selectedPlan").find('option').remove().end();
+            for (var i in dataPlan) {
+                if (dataPlan[i].code_lvl_2 == null) {
+                    $("#selectedPlan").append("<option value='"+ i +"'>"+ dataPlan[i].description +"</option>");
+                }
+            }
+        });
+
+        $("#selectedPlan").on("change", function () {
+            $("#start_date").val(dataPlan[$(this).val()].start_date);
+            $("#finish_date").val(dataPlan[$(this).val()].finish_date);
+            $("#resources div").remove().end();
+            for (var i in resources) {
+                if (resources[i].skill == dataPlan[$(this).val()].code_lvl_2) {
+
+                    $("#resources").append("<div className='form-check'>" +
+                        "<label className='form-check-label'>" +
+                        "<input type='checkbox' data-id='" + resources[i].id + "' className='form-check-input'/>"+ resources[i].description +
+                        "</label></div>");
+                }
+            }
+        });
+
+        $("#form").submit(function () {
+
+            var r = '';
+            $("input[type='checkbox']:checked").each(function () {
+                r = $(this).data('id') + ',' + r;
+            });
+            r = r.substr(0, r.length-1);
+            var p = {
+                'id': dataPlan[$("#selectedPlan").val()].id,
+                'start_date': $("#start_date").val(),
+                'finish_date': $("#finish_date").val(),
+                'resources': r
+            }
+            console.log(p);
+        });
+
+    });
+
+
+    function plotChart(data) {
+        var x = [];
+        var y = [];
+        for (var i in data) {
+            x.push(data[i].date),
+            y.push(data[i].cost)
+        }
+
+        var chartdata = {
+            labels: x,
+            datasets: [
+                {
+                    label: 'Financial State',
+                    data: y,
+                    fill: false,
+                    borderColor: 'blue',
+                    lineTension: 0,
+                    borderDash: []//[5, 15],
+                }
+            ]
+        }
+        var c = $("#myChart")[0].getContext('2d');
+        new Chart(c, {
+            type: 'line',
+            data: chartdata
+        });
+    }
+
+</script>-->
+
+</body>
+</html>
