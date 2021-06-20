@@ -3,7 +3,7 @@ from scipy.special import erfinv
 
 __author__ = "Thu-Hang DO"
 __version__ = "0.0.1"
-__name__"ValueAtRisk"
+__name__ = "ValueAtRisk"
     
 class HistoricalQuantile:
     '''
