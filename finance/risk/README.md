@@ -4,7 +4,7 @@
 
 ## Methodology
 #### _class HistoricalQuantile(loss)_
-<<<<<<< HEAD
+
 ##### Attribute
 ###### _data: 1-D array_
 
@@ -12,16 +12,15 @@
 
 ##### Attribute
 ###### _data: 1-D array_
->>>>>>> b65024114af92fc37ee38c936b6cb5ad484fc16d
 The method is straightforward: VaR is taken as the value at <img src="https://render.githubusercontent.com/render/math?math=\alpha^{th}">-percentile of the loss empirical distribution given the dataset. The drawback of this method is that it equalises weights to each observation and that the distribution is discrete rather than continuous while the latter shoule be more preferable. Moreover, this method requires a large dataset, often >> <img src="https://render.githubusercontent.com/render/math?math=1/(1-\alpha)">. ES is calculated from the formula:
 
 <img src="https://render.githubusercontent.com/render/math?math=ES_\alpha = E\big[loss \big| loss \geq VaR_\alpha\big]">
 
-<<<<<<< HEAD
+
 ##### _Methods_
 =======
 ##### Methods
->>>>>>> b65024114af92fc37ee38c936b6cb5ad484fc16d
+
 ###### _function VaR(alpha=.95, interpolation_method='linear')_
 ###### _function ES(alpha=.95, interpolation_method='linear')_
 ```py
@@ -37,17 +36,15 @@ print(model.ES())
 ```
 #### _class Normal(loss)_
 ##### Attribute
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 ###### _data: 1-D array_
 
 =======
 ###### _data: 1-D array
->>>>>>> b65024114af92fc37ee38c936b6cb5ad484fc16d
+
 =======
 ###### _data: 1-D array_
->>>>>>> 9d767ab8d0f0468f4c868e6a03945a430bfe6f27
+
 The method relies on a specific assumption that the log-return distribution <img src="https://render.githubusercontent.com/render/math?math=r_t"> follows Gaussian distribution. The mean <img src="https://render.githubusercontent.com/render/math?math=\mu"> and standard deviation <img src="https://render.githubusercontent.com/render/math?math=\sigma"> is estimated from historical data
 <img src="https://render.githubusercontent.com/render/math?math=VaR_\alpha = \mu + \sigma\mathcal{N}^{-1}(\alpha)">
 
@@ -62,7 +59,7 @@ The method relies on a specific assumption that the log-return distribution <img
 ##### Methods
 ###### _function VaR(alpha=.95)_
 ###### _function ES(alpha=.95)_
->>>>>>> b65024114af92fc37ee38c936b6cb5ad484fc16d
+
 ```py
 import numpy as np
 from risk import ValueAtRisk as v
@@ -75,7 +72,7 @@ print(model.VaR())
 print(v.ES())
 ```
 
-<<<<<<< HEAD
+
 #### _class KernelDensity(loss)_
 ##### Attribute
 
@@ -85,14 +82,14 @@ print(v.ES())
 =======
 #### _Kernel Density_
 ##### Attributes
-<<<<<<< HEAD
+
 ###### _data: 1-D array
 ###### _kernel: 2-D array (x, f(x))
->>>>>>> b65024114af92fc37ee38c936b6cb5ad484fc16d
+
 =======
 ###### _data: 1-D array_
 ###### _kernel: 2-D array (x, f(x))_
->>>>>>> 9d767ab8d0f0468f4c868e6a03945a430bfe6f27
+
 This method is nonparametrical, the distribution is infered from historical data using kernel method, which utilises Gaussian kernel in this case. 
 <img src="https://render.githubusercontent.com/render/math?math=\hat{f}(x) = \frac{1}{nh}\sum\limits_{i=1}^n\mathcal{K}\big(\frac{x-x_i}{h}\big)">
 
@@ -110,7 +107,7 @@ Having the kernel, VaR and ES is calculated by discretising the density estimate
 ###### _fit(bandwidth=.001, dx=.05)_
 ###### _VaR(alpha=.95)_
 ###### _ES(alpha=.95)_
->>>>>>> b65024114af92fc37ee38c936b6cb5ad484fc16d
+
 ```py
 import numpy as np
 from risk import ValueAtRisk as v
@@ -127,7 +124,7 @@ print(model.ES())
 ```
 
 #### _Extreme Value Theory_
-<<<<<<< HEAD
+
 
 ##### _Attributes_
 ###### _loss: 1-D array_
@@ -136,16 +133,16 @@ print(model.ES())
 
 =======
 ##### Attributes
-<<<<<<< HEAD
+
 ###### _data: 1-D array
 ###### _threshold: float
 ###### _parameters: 1-D array (shape, scale, location) parameters
->>>>>>> b65024114af92fc37ee38c936b6cb5ad484fc16d
+
 =======
 ###### _data: 1-D array_
 ###### _threshold: float_
 ###### _parameters: 1-D array (shape, scale, location) parameters_
->>>>>>> 9d767ab8d0f0468f4c868e6a03945a430bfe6f27
+
 Extreme Value Theory is preferred to estimate VaR and ES at extremes (<img src="https://render.githubusercontent.com/render/math?math=\alpha"> >> 99%)
 The following section introduces a widely accepted method to estimate the parameters in GEV method which was introduced by Pickands (1975). In short, they are given by:
 
@@ -167,7 +164,7 @@ Once the parameters are derived, VaR can be calculated directly using the follow
 
 > McNeil, A.J., Extreme Value Theory for Risk Managers (1999)
 
-<<<<<<< HEAD
+
 ##### _Methods_
 ###### _function fit(threshold=0, dx=.05)_
 ###### _extremal_index(cluster_size=2)_
@@ -180,7 +177,7 @@ Once the parameters are derived, VaR can be calculated directly using the follow
 ###### _extremal_index(cluster_size=2)_
 ##### _VaR(alpha=.95, extremal_index=1)_
 ##### _ES(alpha=.95, extremal_index=1)_
->>>>>>> b65024114af92fc37ee38c936b6cb5ad484fc16d
+
 ```py
 import numpy as np
 from risk import ValueAtRisk as v
