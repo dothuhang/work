@@ -50,7 +50,7 @@ The method relies on a specific assumption that the log-return distribution <img
 
 <img src="https://render.githubusercontent.com/render/math?math=ES_\alpha = \mu + \dfrac{\sigma}{1 - \alpha} \dfrac{1}{\sqrt{2\pi}} exp\Big(-\big(\mathcal{N}^{-1}(\alpha)\big)^2/2\Big)">
 
-<<<<<<< HEAD
+
 ##### _Methods_
 ###### _function VaR(alpha=.95)_
 ###### _function ES(alpha=.95)_
@@ -83,8 +83,8 @@ print(v.ES())
 #### _Kernel Density_
 ##### Attributes
 
-###### _data: 1-D array
-###### _kernel: 2-D array (x, f(x))
+###### _data: 1-D array_
+###### _kernel: 2-D array (x, f(x))_
 
 =======
 ###### _data: 1-D array_
@@ -97,7 +97,7 @@ The estimated density is smoothed by an arbitrary parameter (bandwidth) <img src
 
 Having the kernel, VaR and ES is calculated by discretising the density estimate.
 
-<<<<<<< HEAD
+
 ##### _Methods_
 ###### _fit(bandwidth=.001, dx=.05)
 ###### _function VaR(alpha=.95)_
